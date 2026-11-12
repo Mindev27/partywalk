@@ -49,7 +49,7 @@ footer { color: var(--mist); font-size: 13px; margin-top: 40px; }
   const live = now >= start && now < start + 6 * 3600e3;
   const name = names[Math.floor(start / WEEK) % names.length];
   document.getElementById('eventday-title').textContent = (live ? '지금 진행 중 · ' : '이번 토요일 11시 · ') + name + ' 데이';
-  document.getElementById('eventday-text').textContent = '6시간 동안 동네 지도에 ' + name + (((name.charCodeAt(name.length - 1) - 0xac00) % 28) ? '이' : '가') + ' 잔뜩. 잡으면 보상 1.5배, 반짝이도 4배.';
+  document.getElementById('eventday-text').textContent = '6시간 동안 동네 지도에 ' + name + (((name.charCodeAt(name.length - 1) - 0xac00) % 28) ? '이' : '가') + ' 잔뜩. 잡으면 보상 1.5배, 첫 사냥은 보석 20개, 반짝이도 4배.';
   document.getElementById('eventday').hidden = false;
 })();
 // an invite link (?invite=K7QX2M) shows the code, a way to copy it and a button that opens the app with it
