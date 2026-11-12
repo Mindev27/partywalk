@@ -26,6 +26,7 @@ footer { color: var(--mist); font-size: 13px; margin-top: 40px; }
 <div class="box" id="invite" hidden><h2>초대 코드 <span id="code"></span></h2><p>처음 시작할 때 이 코드를 넣으면 보석과 물약을 받고 친구와 바로 연결돼요.</p><div class="badges"><a id="open" href="#">앱에서 열기</a><a href="#" id="copy">코드 복사</a><a href="https://apps.apple.com/kr/app/id6825486660">앱 받기 · App Store</a></div></div>
 <div class="badges"><a href="https://apps.apple.com/kr/app/id6825486660">App Store에서 받기</a><a href="https://www.instagram.com/partywalk.game/">안드로이드 출시 알림 · 인스타그램</a></div>
 <p style="color:var(--mist);margin:4px 0 0">아이폰은 지금 무료. 안드로이드는 곧 Google Play에 나와요.<br>먼저 해 보려면 <a href="https://play.google.com/apps/testing/com.partywalk.app" style="color:var(--gold)">안드로이드 테스트 참여</a> (테스터 등록이 된 계정만 열려요)</p>
+<div class="box" id="eventday" hidden><h2 id="eventday-title"></h2><p id="eventday-text"></p></div>
 <div class="shots"><img src="img/1.png" alt="게임 화면 1"><img src="img/2.png" alt="게임 화면 2"><img src="img/3.png" alt="게임 화면 3"><img src="img/4.png" alt="게임 화면 4"><img src="img/5.png" alt="게임 화면 5"></div>
 <div class="box"><h2>같이 걸으면 같이 싸운다</h2><p>친구와 50m 안에서 함께 걸으면 친구 캐릭터가 전투에 합류하고, 인연이 깊어지면 둘만의 합동기가 열린다. 보상은 최대 1.5배.</p></div>
 <div class="box"><h2>걸음으로 이어지는 전직</h2><p>모험가에서 전사·마법사로, 다시 나이트·버서커·원소술사·소환술사로.</p></div>
@@ -35,6 +36,21 @@ footer { color: var(--mist); font-size: 13px; margin-top: 40px; }
 <div class="box"><h2>안전하게</h2><p>차량 속도로 움직이면 경고하고, 친구가 아닌 사람에게는 위치가 절대 보이지 않는다.</p></div>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"파티워크","operatingSystem":"iOS","applicationCategory":"GameApplication","description":"걸으면 우리 동네가 도트 RPG 필드가 되는 만보기 걷기 게임. 친구와 같이 걸으면 같이 싸우는 위치기반 협동 RPG. 아이폰 무료.","url":"https://mindev27.github.io/partywalk/","installUrl":"https://apps.apple.com/kr/app/id6825486660","offers":{"@type":"Offer","price":0,"priceCurrency":"KRW"}}</script>
 <script>
+// the next Saturday monster day, worked out the same way as the server (spawn.ts weekendEvent)
+(() => {
+  const names = ["빛반딧불","도둑 고양이","보라 독버섯","집게 게","골목 까마귀","빛 해파리","고블린","그림자 박쥐","도깨비불","장수풍뎅이","돌 골렘","아기 해태"];
+  const KST = 9 * 3600e3, WEEK = 7 * 864e5, now = Date.now(), local = new Date(now + KST);
+  const dayStart = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate()) - KST;
+  const toSat = (6 - local.getUTCDay() + 7) % 7;
+  let start = dayStart + toSat * 864e5 + 11 * 3600e3;
+  const end = start + 6 * 3600e3;
+  if (toSat === 0 && now >= end) start += WEEK;
+  const live = now >= start && now < start + 6 * 3600e3;
+  const name = names[Math.floor(start / WEEK) % names.length];
+  document.getElementById('eventday-title').textContent = (live ? '지금 진행 중 · ' : '이번 토요일 11시 · ') + name + ' 데이';
+  document.getElementById('eventday-text').textContent = '6시간 동안 동네 지도에 ' + name + (((name.charCodeAt(name.length - 1) - 0xac00) % 28) ? '이' : '가') + ' 잔뜩. 잡으면 보상 1.5배, 반짝이도 4배.';
+  document.getElementById('eventday').hidden = false;
+})();
 // an invite link (?invite=K7QX2M) shows the code, a way to copy it and a button that opens the app with it
 const code = (/[?&]invite=([A-Za-z0-9]{6})(?:&|$)/.exec(location.search) || [])[1];
 if (code) {
