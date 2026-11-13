@@ -48,7 +48,10 @@ footer { color: var(--mist); font-size: 13px; margin-top: 40px; }
   if (toSat === 0 && now >= end) start += WEEK;
   const live = now >= start && now < start + 6 * 3600e3;
   const name = names[Math.floor(start / WEEK) % names.length];
-  document.getElementById('eventday-title').textContent = (live ? '지금 진행 중 · ' : '이번 토요일 11시 · ') + name + ' 데이';
+  // Saturday morning it is today; after it ends the next one is a week out
+  const days = Math.round((start - dayStart) / 864e5 - 11 / 24);
+  const when = live ? '지금 진행 중 · ' : days === 0 ? '오늘 11시 · ' : days === 1 ? '내일 11시 · ' : days >= 6 ? '다음 토요일 11시 · ' : '이번 토요일 11시 · ';
+  document.getElementById('eventday-title').textContent = when + name + ' 데이';
   document.getElementById('eventday-text').textContent = '6시간 동안 동네 지도에 ' + name + (((name.charCodeAt(name.length - 1) - 0xac00) % 28) ? '이' : '가') + ' 잔뜩. 잡으면 보상 1.5배, 첫 사냥은 보석 20개, 반짝이도 4배.';
   document.getElementById('eventday').hidden = false;
 })();
